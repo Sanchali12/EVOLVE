@@ -1,0 +1,168 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+.login-container{
+    display:flex;
+    height:100vh;
+    width:100%;
+}
+
+/* LEFT */
+
+.login-left{
+    width:50%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:white;
+}
+
+.login-box{
+    width:380px;
+}
+
+.title{
+    text-align:center;
+    font-size:42px;
+    margin-bottom:10px;
+    color:#f37aba;
+}
+
+.quote{
+    text-align:center;
+    color:rgb(135, 131, 131);
+    margin-bottom:40px;
+}
+
+.input-box{
+    width:100%;
+    padding:15px;
+    margin-bottom:20px;
+    border:none;
+    border-radius:15px;
+    background:#f1f4f8;
+    font-size:16px;
+    outline:none;
+}
+
+.login-btn{
+    width:100%;
+    padding:15px;
+    background:#e78cae;
+    color:white;
+    border:none;
+    border-radius:15px;
+    font-size:18px;
+    cursor:pointer;
+    margin-top:10px;
+}
+
+.login-btn:hover{
+    background:#e998ba;
+}
+
+.forgot-btn{
+    margin-top:15px;
+    border:none;
+    background:none;
+    color:#fb21c5;
+    cursor:pointer;
+    font-size:15px;
+}
+
+.signup-text{
+    text-align:center;
+    margin-top:25px;
+}
+
+.signup-btn{
+    border:none;
+    background:none;
+    color:#f024a2;
+    font-weight:bold;
+    cursor:pointer;
+    margin-left:8px;
+}
+
+.error{
+    color:rgb(70, 7, 28);
+    margin-bottom:15px;
+}
+
+/* RIGHT */
+.login-right{
+    width:50%;
+    height:100vh;
+    overflow:hidden;
+}
+
+.login-right img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+   
+} .popup-overlay{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,.4);
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.popup{
+    width:400px;
+    background:white;
+    border-radius:20px;
+    padding:30px;
+    text-align:center;
+    box-shadow:0 10px 25px rgba(0,0,0,.2);
+}
+
+.popup h2{
+    margin-bottom:15px;
+}
+
+.popup p{
+    margin-bottom:20px;
+    color:gray;
+}
+
+.popup input{
+    width:100%;
+    padding:14px;
+    border-radius:10px;
+    border:1px solid #ddd;
+    margin-bottom:20px;
+}
+
+.popup-buttons{
+    display:flex;
+    justify-content:space-between;
+}
+
+.cancel-btn{
+    background:#ddd;
+    color:black;
+    border:none;
+    padding:12px 20px;
+    border-radius:10px;
+    cursor:pointer;
+}
+.success-message {
+  color: #fd4b9e;
+  background-color: #e8f5e9;
+  border: 1px solid #d47aa0;
+  border-radius: 6px;
+  padding: 10px;
+  margin-top: 12px;
+  text-align: center;
+  font-size: 14px;
+}
