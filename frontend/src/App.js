@@ -1,6 +1,6 @@
 import Login from "./Pages/Login";
 import Signup from "./Pages/Signup";
-import Analytics from "./Pages/Analytics";
+//import Analytics from "./Pages/Analytics";
 import HealthScore from "./Pages/HealthScore";
 import "react-calendar/dist/Calendar.css";
 import "./App.css";
@@ -26,12 +26,12 @@ function App() {
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [showLogin, setShowLogin] = useState(true);
   const [showHealth, setShowHealth] = useState(false);
-  const [completedDates , setCompletedDates]= useState([]);
+  const [, setCompletedDates]= useState([]);
   const [showLogoutPopup, setShowLogoutPopup] = useState(false);
   const [showQuote, setShowQuote] = useState(false);
   const [quote, setQuote] = useState("");
   const [quoteColor, setQuoteColor] = useState("#4CAF50");
-  const [weeklyGoal, setWeeklyGoal] = useState(20);
+  const [weeklyGoal,] = useState(20);
   
 const quotes = {
   Study: [
@@ -96,7 +96,7 @@ const weeklyProgress = Math.min(
   
   const fetchHabits = async() => {
     const res = await
-  fetch("http://localhost:5000/habits" , {
+  fetch("https://evolve-backend-18vo.onrender.com/habits" , {
   headers: {
     Authorization: token,
   },
@@ -123,7 +123,7 @@ setCompletedDates([...new Set(allDates)]);
 useEffect(() =>{
   if(token){
 fetchHabits();}
-  },[token]);
+  },[token , fetchHabits]);
     
 
   
@@ -138,7 +138,7 @@ fetchHabits();}
     return;
   }
 
-  await fetch("http://localhost:5000/add", {
+  await fetch("https://evolve-backend-18vo.onrender.com/add", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -154,7 +154,7 @@ fetchHabits();}
   
   const deleteHabit = async (id) => {
   await
-   fetch (`http://localhost:5000/habits/${id}`, {method: "DELETE"});
+   fetch (`https://evolve-backend-18vo.onrender.com/habits/${id}`, {method: "DELETE"});
     fetchHabits();
  
 };
@@ -166,7 +166,7 @@ const editHabit = (habit) => {
 };
 const saveEdit = async (id) => {
   console.log("Saving:", editTitle);
-  await fetch(`http://localhost:5000/habits/${id}`, {
+  await fetch(`https://evolve-backend-18vo.onrender.com/habits/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -186,7 +186,7 @@ const toggleHabit = async (id) => {
   try {
     //console.log("Sending PUT request:", id);
 
-    const res = await fetch(`http://localhost:5000/habits/${id}/toggle`, {
+    const res = await fetch(`https://evolve-backend-18vo.onrender.com/habits/${id}/toggle`, {
       method: "PUT",
     });
 

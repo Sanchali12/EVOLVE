@@ -14,7 +14,7 @@ const [loginMessage, setLoginMessage] = useState("");
 
  const handleLogin = async () => {
   try {
-    const res = await fetch("http://localhost:5000/login", {
+    const res = await fetch("https://evolve-backend-18vo.onrender.com/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -51,7 +51,7 @@ const handleForgotPassword = async () => {
   }
 
   try {
-    const res = await fetch("http://localhost:5000/forgot-password", {
+    const res = await fetch("https://evolve-backend-18vo.onrender.com/forgot-password", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -90,6 +90,10 @@ const handleForgotPassword = async () => {
         <p className="quote">
           Track today. Transform tomorrow.
         </p>
+        {loginMessage && (
+  <p className="success-message">{loginMessage}
+  </p>
+)}
 
         <input
           className="input-box"

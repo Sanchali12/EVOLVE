@@ -10,7 +10,7 @@ function Signup({setShowLogin}) {
 
   const handleSignup = async () => {
     const res = await fetch(
-      "http://localhost:5000/signup",
+      "https://evolve-backend-18vo.onrender.com/signup",
       {
         method: "POST",
         headers: {
