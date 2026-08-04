@@ -7,7 +7,7 @@ import "./App.css";
 
 import Calendar from "react-calendar";
 //import "react-calendar/dist/Calendar.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState , useCallback } from "react";
 //import { CALENDAR_TYPES } from "react-calendar/dist/shared/const.js";
 
 function App() {
@@ -94,7 +94,7 @@ const weeklyProgress = Math.min(
   
   // Fetch habits
   
-  const fetchHabits = async() => {
+  const fetchHabits = useCallback(async() => {
     const res = await
   fetch("https://evolve-backend-18vo.onrender.com/habits" , {
   headers: {
@@ -118,7 +118,7 @@ setCompletedDates([...new Set(allDates)]);
         setHabits([]);
     }
     
-};
+}, [token]);
 // eslint-disable-next-line react-hooks/exhaustive-deps
 useEffect(() =>{
   if(token){
