@@ -316,12 +316,13 @@ console.log("EMAIL_PASS exists:", !!process.env.EMAIL_PASS);
     });
 
   } catch (err) {
-    console.error(err);
-    res.status(500).json({
-      success: false,
-      message: "Failed to send email.",
-    });
-  }
+  console.error("FULL ERROR:", err);
+
+  res.status(500).json({
+    success: false,
+    message: err.message,
+  });
+}
 });
 
 app.get("/test", (req, res) => {
