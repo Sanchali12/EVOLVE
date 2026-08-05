@@ -12,6 +12,16 @@ const auth = require("./middleware/auth");
 const cors = require("cors");
 const dns = require("dns");
 const app = express();
+const nodemailer = require("nodemailer");
+
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
 app.use(function( req, res, next)  {
   console.log("REQUEST:", req.method, req.url);
   next();
@@ -264,32 +274,47 @@ app.post("/login", async (req, res) => {
     });
   }
 });
+app.post("/forgot-password", async (req, res) => {
+  console.log("Forgot password route called");
+  try {
+    const { email } = req.body;
 
-  app.post("/forgot-password", async (req, res) => {
-  const { email } = req.body;
+    if (!email) {
+      return res.json({
+        success: false,
+        message: "Email is required",
+      });
+    }
 
-  if (!email) {
-    return res.json({
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.json({
+        success: false,
+        message: "Email not registered.",
+      });
+    }
+
+    const info = await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: "Password Reset - EVOLVE",
+      text: "Someone requested a password reset for your EVOLVE account. The reset page will be added in the next step.",
+    });
+    console.log(info);
+
+    res.json({
+      success: true,
+      message: "Password reset email sent successfully.",
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
       success: false,
-      message: "Email is required",
+      message: "Failed to send email.",
     });
   }
-
-  const user = await User.findOne({ email });
-
-  if (!user) {
-    return res.json({
-      success: false,
-      message: "No account found with this email.",
-    });
-  }
-
-  // We'll add email sending later.
-
-  res.json({
-    success: true,
-    message: "Password reset link sent to your email.",
-  });
 });
 
 app.get("/test", (req, res) => {
