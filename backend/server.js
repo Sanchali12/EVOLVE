@@ -16,10 +16,15 @@ const nodemailer = require("nodemailer");
 
 
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
+  },
+  tls: {
+    rejectUnauthorized: false,
   },
 });
 app.use(function( req, res, next)  {
@@ -275,7 +280,7 @@ app.post("/login", async (req, res) => {
   }
 });
 app.post("/forgot-password", async (req, res) => {
-  console.log("Forgot password route called");
+  
   try {
     const { email } = req.body;
 
@@ -295,6 +300,8 @@ app.post("/forgot-password", async (req, res) => {
       });
     }
 
+    console.log("EMAIL_USER:", process.env.EMAIL_USER);
+console.log("EMAIL_PASS exists:", !!process.env.EMAIL_PASS);
     const info = await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: email,
