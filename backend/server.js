@@ -13,7 +13,7 @@ const cors = require("cors");
 const dns = require("dns");
 const app = express();
 const nodemailer = require("nodemailer");
-
+const dns = require("dns");
 
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
@@ -25,6 +25,9 @@ const transporter = nodemailer.createTransport({
   },
   tls: {
     rejectUnauthorized: false,
+  },
+  lookup(hostname, options, callback) {
+    return dns.lookup(hostname, { family: 4 }, callback);
   },
 });
 app.use(function( req, res, next)  {
