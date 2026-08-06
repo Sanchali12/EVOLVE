@@ -11,6 +11,7 @@ const jwt = require("jsonwebtoken");
 const auth = require("./middleware/auth");
 const cors = require("cors");
 //const dns = require("dns");
+
 const app = express();
 const nodemailer = require("nodemailer");
 const dns = require("dns");
@@ -304,14 +305,15 @@ app.post("/forgot-password", async (req, res) => {
         message: "Email not registered.",
       });
     }
-
+ 
+    
     console.log("EMAIL_USER:", process.env.EMAIL_USER);
 console.log("EMAIL_PASS exists:", !!process.env.EMAIL_PASS);
     const info = await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: email,
       subject: "Password Reset - EVOLVE",
-      text: "Someone requested a password reset for your EVOLVE account. The reset page will be added in the next step.",
+      text: "Someone requested a password reset for your EVOLVE account.",
     });
     console.log(info);
 
