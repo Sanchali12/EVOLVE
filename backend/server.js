@@ -316,7 +316,7 @@ app.post("/forgot-password", async (req, res) => {
 
     // Reset-password page on your frontend
     const resetLink =
-  `https://evolve-frontend-hazel.vercel.app/reset-password/${resetToken}`;
+  `https://frontend-hazel.vercel.app/reset-password/${resetToken}`;
 
     const info = await transporter.sendMail({
       from: `"EVOLVE" <${process.env.EMAIL_USER}>`,
