@@ -15,16 +15,16 @@ const cors = require("cors");
 const app = express();
 const nodemailer = require("nodemailer");
 const dns = require("dns");
+const crypto = require("crypto");
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
+  host: "smtp-relay.brevo.com",
+  port: 587,
+  secure: false,
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
+    user: process.env.BREVO_SMTP_USER,
+    pass: process.env.BREVO_SMTP_KEY,
   },
-  family: 4,
 });
 transporter.verify(function (error, success) {
   if (error) {
@@ -286,7 +286,6 @@ app.post("/login", async (req, res) => {
   }
 });
 app.post("/forgot-password", async (req, res) => {
-  
   try {
     const { email } = req.body;
 
@@ -305,17 +304,38 @@ app.post("/forgot-password", async (req, res) => {
         message: "Email not registered.",
       });
     }
- 
-    
-    console.log("EMAIL_USER:", process.env.EMAIL_USER);
-console.log("EMAIL_PASS exists:", !!process.env.EMAIL_PASS);
+
+    // Generate secure reset token
+    const resetToken = crypto.randomBytes(32).toString("hex");
+
+    // Save token and expiry in database
+    user.resetPasswordToken = resetToken;
+    user.resetPasswordExpires = Date.now() + 15 * 60 * 1000; // 15 minutes
+
+    await user.save();
+
+    // Reset-password page on your frontend
+    const resetLink =
+  `https://frontend-hazel.vercel.app/reset-password/${resetToken}`;
+
     const info = await transporter.sendMail({
-      from: process.env.EMAIL_USER,
+      from: `"EVOLVE" <${process.env.EMAIL_USER}>`,
       to: email,
-      subject: "Password Reset - EVOLVE",
-      text: "Someone requested a password reset for your EVOLVE account.",
+      subject: "Reset your EVOLVE password",
+      text: `We received a request to reset your EVOLVE password.
+
+Click this link to reset your password:
+
+${resetLink}
+
+This link will expire in 15 minutes.
+
+If you did not request a password reset, you can safely ignore this email.
+
+- EVOLVE Team`,
     });
-    console.log(info);
+
+    console.log("Password reset email sent:", info.messageId);
 
     res.json({
       success: true,
@@ -323,13 +343,64 @@ console.log("EMAIL_PASS exists:", !!process.env.EMAIL_PASS);
     });
 
   } catch (err) {
-  console.error("FULL ERROR:", err);
+    console.error("FULL ERROR:", err);
 
-  res.status(500).json({
-    success: false,
-    message: err.message,
-  });
-}
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+});
+
+app.post("/reset-password", async (req, res) => {
+  try {
+    const { token, password } = req.body;
+
+    if (!token || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Token and password are required.",
+      });
+    }
+
+    // Find user with matching token that has not expired
+    const user = await User.findOne({
+      resetPasswordToken: token,
+      resetPasswordExpires: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: "Reset link is invalid or expired.",
+      });
+    }
+
+    // Hash the new password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Update password
+    user.password = hashedPassword;
+
+    // Remove the reset token so it cannot be reused
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+
+    await user.save();
+
+    res.json({
+      success: true,
+      message: "Password reset successfully.",
+    });
+
+  } catch (err) {
+    console.error("RESET PASSWORD ERROR:", err);
+
+    res.status(500).json({
+      success: false,
+      message: "Something went wrong. Please try again.",
+    });
+  }
 });
 
 app.get("/test", (req, res) => {
