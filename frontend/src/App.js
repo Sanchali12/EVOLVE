@@ -1,7 +1,8 @@
 import Login from "./Pages/Login";
 import Signup from "./Pages/Signup";
+import ResetPassword from "./Pages/ResetPass";
 //import { useState } from "react";
-//import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
        
 //import Analytics from "./Pages/Analytics";
@@ -650,4 +651,15 @@ const searchMatch =
   );
   }
 
-export default App;
+function AppWithRouter() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route path="*" element={<App />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+export default AppWithRouter;
