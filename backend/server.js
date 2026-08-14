@@ -231,17 +231,9 @@ app.post("/signup", async (req, res) => {
     });
   }
 });
-app.post("/login", async (req, res) => {
-  try {
-    const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
+    
 
-    if (!user) {
-      return res.status(400).json({
-        message: "User not found"
-      });
-      const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 app.post("/google-login", async (req, res) => {
   try {
@@ -249,14 +241,13 @@ app.post("/google-login", async (req, res) => {
 
     if (!credential) {
       return res.status(400).json({
-        message: "Google credential is required",
+        message: "Google credential is required"
       });
     }
 
-    // Verify Google token
     const ticket = await googleClient.verifyIdToken({
       idToken: credential,
-      audience: process.env.GOOGLE_CLIENT_ID,
+      audience: process.env.GOOGLE_CLIENT_ID
     });
 
     const payload = ticket.getPayload();
@@ -264,28 +255,24 @@ app.post("/google-login", async (req, res) => {
     const {
       sub: googleId,
       email,
-      name,
+      name
     } = payload;
 
-    // Find existing user
     let user = await User.findOne({ email });
 
-    // Create user if they don't exist
     if (!user) {
       user = new User({
         name,
         email,
-        googleId,
+        googleId
       });
 
       await user.save();
     } else {
-      // Link Google account to existing account
       user.googleId = googleId;
       await user.save();
     }
 
-    // Create your normal EVOLVE JWT
     const token = jwt.sign(
       { id: user._id },
       "mysecretkey",
@@ -294,47 +281,19 @@ app.post("/google-login", async (req, res) => {
 
     res.json({
       message: "Google login successful",
-      token,
+      token
     });
 
   } catch (err) {
     console.error("GOOGLE LOGIN ERROR:", err);
 
     res.status(500).json({
-      message: "Google login failed",
+      message: "Google login failed"
     });
   }
 });
-    }
 
-    const isMatch = await bcrypt.compare(
-      password,
-      user.password
-    );
-
-    if (!isMatch) {
-      return res.status(400).json({
-        message: "Invalid password"
-      });
-    }
-
-    const token = jwt.sign(
-      { id: user._id },
-      "mysecretkey",
-      { expiresIn: "7d" }
-    );
-
-    res.json({
-      message: "Login successful",
-      token
-    });
-
-  } catch (err) {
-    res.status(500).json({
-      message: err.message
-    });
-  }
-});
+   
 
 
 app.get("/test", (req, res) => {
