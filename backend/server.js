@@ -10,6 +10,10 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const auth = require("./middleware/auth");
 const cors = require("cors");
+const { OAuth2Client } = require("google-auth-library");
+const googleClient = new OAuth2Client(
+  process.env.GOOGLE_CLIENT_ID
+);
 //const dns = require("dns");
 
 const app = express();
@@ -255,6 +259,70 @@ app.post("/login", async (req, res) => {
       return res.status(400).json({
         message: "User not found"
       });
+      const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+app.post("/google-login", async (req, res) => {
+  try {
+    const { credential } = req.body;
+
+    if (!credential) {
+      return res.status(400).json({
+        message: "Google credential is required",
+      });
+    }
+
+    // Verify Google token
+    const ticket = await googleClient.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+
+    const {
+      sub: googleId,
+      email,
+      name,
+    } = payload;
+
+    // Find existing user
+    let user = await User.findOne({ email });
+
+    // Create user if they don't exist
+    if (!user) {
+      user = new User({
+        name,
+        email,
+        googleId,
+      });
+
+      await user.save();
+    } else {
+      // Link Google account to existing account
+      user.googleId = googleId;
+      await user.save();
+    }
+
+    // Create your normal EVOLVE JWT
+    const token = jwt.sign(
+      { id: user._id },
+      "mysecretkey",
+      { expiresIn: "7d" }
+    );
+
+    res.json({
+      message: "Google login successful",
+      token,
+    });
+
+  } catch (err) {
+    console.error("GOOGLE LOGIN ERROR:", err);
+
+    res.status(500).json({
+      message: "Google login failed",
+    });
+  }
+});
     }
 
     const isMatch = await bcrypt.compare(
