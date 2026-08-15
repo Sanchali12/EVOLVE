@@ -1,6 +1,7 @@
 import Login from "./Pages/Login";
 import Signup from "./Pages/Signup";
 import ResetPassword from "./Pages/ResetPass";
+import GetStarted from "./Pages/GetStarted";
 //import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
@@ -29,7 +30,8 @@ function App() {
   const [ showDetails , setShowDetails] = useState(null);
   const [showHistory, setShowHistory] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("token"));
-  const [showLogin, setShowLogin] = useState(true);
+  const [showLogin, setShowLogin] = useState(false);
+  const [showGetStarted, setShowGetStarted] = useState(true);
   const [showHealth, setShowHealth] = useState(false);
   const [, setCompletedDates]= useState([]);
   const [showLogoutPopup, setShowLogoutPopup] = useState(false);
@@ -252,18 +254,27 @@ const randomQuote =
 };
 
  if (!token) {
+  if (showGetStarted) {
+    return (
+      <GetStarted
+        setShowLogin={setShowLogin}
+        setShowGetStarted={setShowGetStarted}
+      />
+    );
+  }
+
   return showLogin ? (
     <Login
       setToken={setToken}
       setShowLogin={setShowLogin}
+      setShowGetStarted={setShowGetStarted}
     />
   ) : (
     <Signup
       setShowLogin={setShowLogin}
     />
   );
-}    
-
+}
 if (showHealth) {
   return (
     <HealthScore

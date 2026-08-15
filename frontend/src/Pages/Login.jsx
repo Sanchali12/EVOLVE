@@ -1,15 +1,13 @@
 import { useState } from "react";
+import { GoogleLogin } from "@react-oauth/google";
 import "./Login.css";
-import LoginImage from "../Assets/Habit.jpg";
+import LoginImage from "../Assets/Back.jpg";
 
 
-function Login({setToken,setShowLogin}) {
+function Login({setToken,setShowLogin,setShowGetStarted}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error , setError] = useState ("");
-const [showForgotPassword, setShowForgotPassword] = useState(false);
-const [resetEmail, setResetEmail] = useState("");
-const [forgotMessage, setForgotMessage] = useState("");
 const [loginMessage, setLoginMessage] = useState("");
 
  const handleLogin = async () => {
@@ -32,7 +30,7 @@ const [loginMessage, setLoginMessage] = useState("");
       setToken(data.token);
 
       setLoginMessage("Login successful");
-      setForgotMessage(""); // Clear forgot password message
+      
       setError("");
     } else {
       setLoginMessage("");
@@ -44,37 +42,33 @@ const [loginMessage, setLoginMessage] = useState("");
     setError("Something went wrong. Please try again.");
   }
 };
-const handleForgotPassword = async () => {
-  if (!resetEmail) {
-    alert("Please enter your email.");
-    return;
-  }
-
+  const handleGoogleLogin = async (credentialResponse) => {
   try {
-    const res = await fetch("https://evolve-backend-18vo.onrender.com/forgot-password", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: resetEmail,
-      }),
-    });
+    const res = await fetch(
+      "https://evolve-backend-18vo.onrender.com/google-login",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          credential: credentialResponse.credential,
+        }),
+      }
+    );
 
     const data = await res.json();
 
-   setForgotMessage(data.message);
-      // Show the message in the popup
-      setTimeout(() => {
-  setShowForgotPassword(false);
-  setForgotMessage("");
-  setResetEmail("");
-}, 2500);
-    setLoginMessage("");   
-
+    if (data.token) {
+      localStorage.setItem("token", data.token);
+      setToken(data.token);
+      setError("");
+    } else {
+      setError(data.message || "Google login failed");
+    }
   } catch (err) {
-    console.error(err);
-    alert("Something went wrong. Please try again.");
+    console.error("Google login error:", err);
+    setError("Something went wrong with Google login.");
   }
 };
      return (
@@ -84,12 +78,19 @@ const handleForgotPassword = async () => {
     <div className="login-left">
 
       <div className="login-box">
+        <button
+  className="back-btn"
+  onClick={() => {
+    setShowLogin(false);
+    setShowGetStarted(true);
+  }}
+>
+  ← Back
+</button>
 
-        <h1 className="title">EVOLVE</h1>
-
-        <p className="quote">
-          Track today. Transform tomorrow.
-        </p>
+        <p className="login-quote">
+  Good Things Take Time.
+</p>
         {loginMessage && (
   <p className="success-message">{loginMessage}
   </p>
@@ -123,13 +124,18 @@ const handleForgotPassword = async () => {
           Login
         </button>
 
-        <button
-          className="forgot-btn"
-          onClick={() => setShowForgotPassword(true)}
-        >
-          Forgot Password?
-        </button>
+        <div className="or-divider">
+  <span>OR</span>
+</div>
 
+<div className="google-login">
+  <GoogleLogin
+    onSuccess={handleGoogleLogin}
+    onError={() => {
+      setError("Google login failed.");
+    }}
+  />
+</div>
         <p className="signup-text">
           Don't have an account?
 
@@ -137,7 +143,7 @@ const handleForgotPassword = async () => {
             className="signup-btn"
             onClick={() => setShowLogin(false)}
           >
-            Sign Up
+            Create Account
           </button>
         </p>
 
@@ -150,50 +156,7 @@ const handleForgotPassword = async () => {
    <div className="login-right">
   <img src={LoginImage} alt="Habit Tracker" />
   </div>
-{showForgotPassword && (
-  <div className="popup-overlay">
 
-    <div className="popup">
-
-      <h2>Reset Password</h2>
-
-      <p>Enter your registered email.</p>
-
-      <input
-        type="email"
-        placeholder="Email"
-        value={resetEmail}
-        onChange={(e) => setResetEmail(e.target.value)}
-      />
-      {forgotMessage && (
-  <p className="success-message">{forgotMessage}</p>
-)}
-
-      <div className="popup-buttons">
-
-        <button className="login-btn" 
-        onClick={handleForgotPassword}
->
-          Send Link
-        </button>
-
-        <button
-          className="cancel-btn"
-          onClick={() => {
-            setShowForgotPassword(false);
-            setForgotMessage("");
-  setResetEmail("");
-          }}
-        >
-          Cancel
-        </button>
-
-      </div>
-
-    </div>
-
-  </div>
-)}
   </div>
 );
       

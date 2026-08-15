@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./Login.css";
-import LoginImage from "../Assets/Habit.jpg";
+import LoginImage from "../Assets/Back.jpg";
 
 function Signup({setShowLogin}) {
   const [name, setName] = useState("");
