@@ -34,7 +34,7 @@ const [loginMessage, setLoginMessage] = useState("");
       setError("");
     } else {
       setLoginMessage("");
-      setError("Invalid email or password");
+      setError(data.message || "Invalid email or password");
     }
   } catch (error) {
     console.error(error);
@@ -130,6 +130,7 @@ const [loginMessage, setLoginMessage] = useState("");
 
 <div className="google-login">
   <GoogleLogin
+  text="signin_with"
     onSuccess={handleGoogleLogin}
     onError={() => {
       setError("Google login failed.");

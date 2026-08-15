@@ -41,12 +41,10 @@ body {
 
 /* CENTER PAGE */
 .container {
-  width : 100%;
-  max-height: 100px;
+  width: 100%;
+  min-height: 100vh;
   padding: 20px 40px;
   box-sizing: border-box;
- 
-  padding: 20px;
 }
 .box{
   width: 100%;
@@ -585,4 +583,337 @@ li {
 }
 .dashboard-row > div{
   flex:1;
+}
+/* =========================================
+   MOBILE RESPONSIVE DESIGN
+   ========================================= */
+
+@media (max-width: 768px) {
+
+  html,
+  body,
+  #root {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  /* MAIN PAGE */
+
+  .container {
+    width: 100%;
+    min-height: 100vh;
+    padding: 15px;
+    overflow-x: hidden;
+  }
+
+  .box {
+    width: 100%;
+  }
+
+  h1 {
+    font-size: 28px;
+    line-height: 1.2;
+    margin-bottom: 18px;
+  }
+
+
+  /* ADD HABIT */
+
+  .input-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+
+  .input-container input,
+  .input-container select,
+  .input-container .add-btn {
+    width: 100%;
+    min-width: 0;
+    height: 48px;
+  }
+
+
+  /* STATS */
+
+  .stats {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin: 15px 0;
+  }
+
+  .stat-card {
+    width: 100%;
+    min-width: 0;
+    padding: 10px 5px;
+  }
+
+  .stat-card h3 {
+    font-size: 22px;
+  }
+
+  .stat-card p {
+    font-size: 12px;
+    line-height: 1.3;
+  }
+
+
+  /* PROGRESS */
+
+  .progress-container {
+    width: 100%;
+    height: 10px;
+    margin: 15px 0;
+  }
+
+
+  /* DASHBOARD CARDS */
+
+  .dashboard-row {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 15px 0;
+  }
+
+  .dashboard-row > div {
+    width: 100%;
+  }
+
+  .weekly-goal-card,
+  .badge-section {
+    width: 100%;
+    margin-top: 0;
+    padding: 16px;
+  }
+
+  .weekly-goal-card h2,
+  .badge-section h2 {
+    font-size: 21px;
+  }
+
+
+  /* BADGES */
+
+  .badge-container {
+    display: flex;
+    width: 100%;
+    overflow-x: auto;
+    gap: 10px;
+    padding-bottom: 8px;
+  }
+
+  .badge {
+    flex: 0 0 85px;
+    min-width: 85px;
+  }
+
+
+  /* FILTERS */
+
+  .filters {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 15px 0;
+  }
+
+  .filters button {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
+  .search-box {
+    width: 100%;
+    height: 45px;
+    margin: 8px 0;
+  }
+
+
+  /* HABIT LIST */
+
+  .habit-list {
+    width: 100%;
+    max-width: 100%;
+    margin-top: 15px;
+    overflow: visible;
+  }
+
+  .habit-list ul {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+
+  /* EACH HABIT */
+
+  .habit-item {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 15px;
+    margin-bottom: 12px;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .habit-info {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .habit-text {
+    width: 100%;
+    min-width: 0;
+    display: block;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+
+  /* CATEGORY */
+
+  .category-tag {
+    display: inline-block;
+    margin: 6px 4px 4px 0;
+  }
+
+
+  /* HABIT DETAILS */
+
+  .habit-info p {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .streak-text,
+  .last-completed-text,
+  .history-text,
+  .longest-streak-text {
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+
+  /* BUTTONS */
+
+  .action-buttons {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 5px;
+  }
+
+  .action-buttons button {
+    width: 100%;
+    min-width: 0;
+    margin-left: 0;
+    padding: 9px 6px;
+    font-size: 13px;
+  }
+
+
+  /* HISTORY */
+
+  .history-row {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .history-text {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .history-btn {
+    flex-shrink: 0;
+  }
+
+  .history-popup {
+    width: 100%;
+    max-height: 180px;
+    overflow-y: auto;
+  }
+
+
+  /* CALENDAR */
+
+  .calendar-section {
+    position: static;
+    width: 100%;
+    max-width: 100%;
+    margin-top: 10px;
+    overflow-x: auto;
+  }
+
+  .react-calendar {
+    width: 100% !important;
+    max-width: 320px;
+    font-size: 11px;
+  }
+
+
+  /* POPUPS */
+
+  .popup-overlay {
+    padding: 15px;
+  }
+
+  .popup,
+  .logout-popup {
+    width: 100%;
+    max-width: 350px;
+    min-width: 0;
+  }
+
+  .popup-buttons {
+    flex-wrap: wrap;
+  }
+
+
+  /* QUOTE POPUP */
+
+  .quote-popup {
+    width: calc(100% - 30px);
+    min-width: 0;
+    max-width: 400px;
+    padding: 15px 18px;
+  }
+
+  .quote-popup h3 {
+    font-size: 19px;
+  }
+
+  .quote-popup p {
+    font-size: 14px;
+  }
+
 }
